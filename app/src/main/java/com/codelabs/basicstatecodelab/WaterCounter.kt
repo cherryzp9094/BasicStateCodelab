@@ -15,22 +15,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WaterCounter(modifier: Modifier = Modifier) {
+fun StatelessCounter(count: Int, onIncrement: () -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(16.dp)) {
-        var count by rememberSaveable { mutableStateOf(0) }
         if (count > 0) {
-            Text("You've had $count glasses.")
+            Text(text = "You've had $count glasses.")
         }
-        Button(onClick = { count++ }, Modifier.padding(top = 8.dp), enabled = count < 10) {
-            Text("Add one")
+        Button(onClick = onIncrement, Modifier.padding(top = 8.dp), enabled = count < 10) {
+            Text(text = "Add one")
         }
     }
 }
 
+@Composable
+fun StatefulCounter(modifier: Modifier = Modifier) {
+    var count by rememberSaveable { mutableStateOf(0) }
+    StatelessCounter(count = count, onIncrement = { count++ }, modifier)
+}
+
 @Preview
 @Composable
-fun WaterCounterPreview() {
-    Surface() {
-        WaterCounter()
+fun StatefullCounterPreview() {
+    Surface {
+        StatefulCounter()
     }
 }
